@@ -2,8 +2,8 @@ import { getContacts } from "@/lib/data"
 import { formatDate } from "@/lib/utils"
 import { EditButton, DeleteButton } from "@/components/Button"
 
-export default async function ContactTable() {
-    const contacts = await getContacts()
+export default async function ContactTable({ query, currentPage }: { query: string; currentPage: number }) {
+    const contacts = await getContacts(query, currentPage)
 
     return (
         <table className="w-full text-sm text-left text-gray-500">
@@ -24,8 +24,8 @@ export default async function ContactTable() {
                         <td className="py-3 px-6">{contact.phone}</td>
                         <td className="py-3 px-6">{formatDate(contact.createdAt.toString())}</td>
                         <td className="flex justify-center gap-1 py-3">
-                            <EditButton />
-                            <DeleteButton />
+                            <EditButton id={contact.id} />
+                            <DeleteButton id={contact.id} />
                         </td>
                     </tr>
                 ))}

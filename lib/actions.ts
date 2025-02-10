@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
 import { z } from "zod";
@@ -10,7 +11,7 @@ const ContactSchema = z.object({
     phone: z.string().min(11),
 });
 
-export const saveContact = async (prevSate: any, formData: FormData) => {
+export const saveContact = async (prevSate: unknown, formData: FormData) => {
     const validatedFields = ContactSchema.safeParse(
         Object.fromEntries(formData.entries())
     );
@@ -38,7 +39,7 @@ export const saveContact = async (prevSate: any, formData: FormData) => {
 
 export const updateContact = async (
     id: string,
-    prevSate: any,
+    prevSate: unknown,
     formData: FormData
 ) => {
     const validatedFields = ContactSchema.safeParse(
@@ -67,14 +68,9 @@ export const updateContact = async (
     redirect("/contacts");
 };
 
-export const deleteContact = async (id: string) => {
-    try {
-        await prisma.contact.delete({
-            where: { id },
-        });
-    } catch (error) {
-        return { message: "Failed to delete contact" };
-    }
-
+export async function deleteContact(id: string) {
+    await prisma.contact.delete({
+        where: { id },
+    });
     revalidatePath("/contacts");
-};
+}
